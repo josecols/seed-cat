@@ -1,0 +1,88 @@
+'use client';
+
+import * as Headless from '@headlessui/react';
+import clsx from 'clsx';
+import type React from 'react';
+
+export function Fieldset({
+  className,
+  ...props
+}: { className?: string } & Omit<Headless.FieldsetProps, 'className'>) {
+  return (
+    <Headless.Fieldset
+      {...props}
+      className={clsx(
+        className,
+        '[&>*+[data-slot=control]]:mt-6 [&>[data-slot=text]]:mt-1'
+      )}
+    />
+  );
+}
+
+export function Legend({
+  className,
+  ...props
+}: { className?: string } & Omit<Headless.LegendProps, 'className'>) {
+  return (
+    <Headless.Legend
+      data-slot="legend"
+      {...props}
+      className={clsx(
+        className,
+        'text-base/6 font-semibold text-stone-950 data-[disabled]:opacity-50 sm:text-sm/6'
+      )}
+    />
+  );
+}
+
+export function Field({
+  className,
+  ...props
+}: { className?: string } & Omit<Headless.FieldProps, 'className'>) {
+  return (
+    <Headless.Field
+      {...props}
+      className={clsx(
+        className,
+        '[&>[data-slot=label]+[data-slot=control]]:mt-3',
+        '[&>[data-slot=label]+[data-slot=description]]:mt-1',
+        '[&>[data-slot=description]+[data-slot=control]]:mt-3',
+        '[&>[data-slot=control]+[data-slot=description]]:mt-3',
+        '[&>[data-slot=control]+[data-slot=error]]:mt-3',
+        '[&>[data-slot=label]]:font-medium'
+      )}
+    />
+  );
+}
+
+export function Label({
+  className,
+  ...props
+}: { className?: string } & Omit<Headless.LabelProps, 'className'>) {
+  return (
+    <Headless.Label
+      data-slot="label"
+      {...props}
+      className={clsx(
+        className,
+        'select-none text-sm/6 text-stone-950 data-[disabled]:opacity-50'
+      )}
+    />
+  );
+}
+
+export function ErrorMessage({
+  className,
+  ...props
+}: { className?: string } & Omit<Headless.DescriptionProps, 'className'>) {
+  return (
+    <Headless.Description
+      data-slot="error"
+      {...props}
+      className={clsx(
+        className,
+        'text-base/6 text-red-600 data-[disabled]:opacity-50 sm:text-sm/6'
+      )}
+    />
+  );
+}

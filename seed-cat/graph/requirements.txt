@@ -1,0 +1,4 @@
+flask==3.0.3
+gunicorn==22.0.0
+prov==2.0.1
+pydot==3.0.1
