@@ -4,7 +4,7 @@
       A computer-aided translation tool designed for expanding the <a href="https://github.com/openlanguagedata/seed">Seed dataset</a> and training machine translation models.
       <br />
    </p>
-   <a href="https://seed-cat.vercel.app"><img src="https://storage.googleapis.com/seet-cat/app.png" width="80%" /></a>
+   <a href="https://seed-cat.vercel.app"><img src="https://storage.googleapis.com/seet-cat/app.png" width="90%" /></a>
    <br />
    <br />
    <a href="https://seed-cat.vercel.app">View Demo</a>
