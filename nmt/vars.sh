@@ -17,7 +17,7 @@ BIN_PATH=$ROOT/bin/
 
 # WandB
 WANDB_CONSOLE=off
-WANDB_PROJECT=wmt24-oldi
+WANDB_PROJECT=
 
 # Fairseq Variables
 LANGS="$SOURCE_LANG,$TARGET_LANG"
