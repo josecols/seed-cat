@@ -191,9 +191,9 @@ function initProvJson(sourceLanguage: string) {
   return {
     prefix: {
       prov: 'https://www.w3.org/ns/prov#',
-      oldi: 'https://github.com/openlanguagedata',
-      wn: 'https://wordnet.princeton.edu',
-      [PROV_NAMESPACE]: 'https://www.seed.org',
+      oldi: 'https://github.com/openlanguagedata/seed/blob/main/',
+      wn: 'https://wordnet.princeton.edu/',
+      [PROV_NAMESPACE]: 'https://seed-cat.vercel.app/',
     },
     entity: {
       [`oldi:seed/${sourceLanguage}`]: {
