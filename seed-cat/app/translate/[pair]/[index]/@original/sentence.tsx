@@ -158,17 +158,24 @@ export function Sentence({
           <Text>{sentence.text}</Text>
         )}
         <Divider />
-        <div className="flex flex-col justify-between gap-1 md:flex-row md:items-center">
-          <Headless.Field className="flex flex-shrink-0 items-center gap-2">
-            <Switch checked={showTags} onChange={toggleShowTags} color="blue" />
-            <Label className="cursor-pointer font-medium">Show tags</Label>
-          </Headless.Field>
-          {showTags ? (
-            <span className="text-xs/6 text-zinc-600">
-              You can click on each word to see more information.
-            </span>
-          ) : null}
-        </div>
+
+        {sentence.tags?.length ? (
+          <div className="flex flex-col justify-between gap-1 md:flex-row md:items-center">
+            <Headless.Field className="flex flex-shrink-0 items-center gap-2">
+              <Switch
+                checked={showTags}
+                onChange={toggleShowTags}
+                color="blue"
+              />
+              <Label className="cursor-pointer font-medium">Show tags</Label>
+            </Headless.Field>
+            {showTags ? (
+              <span className="text-xs/6 text-zinc-600">
+                You can click on each word to see more information.
+              </span>
+            ) : null}
+          </div>
+        ) : null}
         {wordNetTerm ? (
           <WordNetDialog
             onClose={() => setShowWordNet(false)}
@@ -177,12 +184,12 @@ export function Sentence({
           />
         ) : null}
       </div>
-      {sentence.tags?.length ? (
+      {sentence ? (
         <Metadata
-          source={sentence.source}
           length={sentence.text.length}
-          wordCount={sentence.tags.filter(([k, v]) => k !== v).length}
           onOpen={handleOpenSourceUrl}
+          source={sentence.source}
+          tags={sentence.tags}
         />
       ) : null}
     </>

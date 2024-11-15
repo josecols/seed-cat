@@ -44,7 +44,7 @@ Training the model requires an NVIDIA GPU, CUDA, and [NCCL](https://github.com/N
 
 2. Set up the `train`, `valid`, and `test` data directories.
 
-    For instance, if you're training an English-Spanish model, you can use the Seed and [`FLORES+`](https://github.com/openlanguagedata/flores) datasets. Download the [`eng_Latn`](https://github.com/openlanguagedata/seed/blob/main/seed/eng_Latn) corpus from Seed and the [latest release](https://github.com/openlanguagedata/flores/releases) of the FLORES+ dataset. For FLORES+, use the `dev` split for validation and the `devtest` split for testing.
+    For instance, if you're training an English-Spanish model, you can use the Seed and [`FLORES+`](https://huggingface.co/datasets/openlanguagedata/flores_plus) datasets. Download the [`eng_Latn`](https://huggingface.co/datasets/openlanguagedata/oldi_seed/viewer/default/train?q=eng) corpus from Seed and the [latest release](https://huggingface.co/datasets/openlanguagedata/flores_plus) of the FLORES+ dataset. For FLORES+, use the `dev` split for validation and the `devtest` split for testing.
 
     Example directory structure:
 

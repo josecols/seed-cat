@@ -5,8 +5,7 @@ import {
 } from 'natural/lib/natural/brill_pos_tagger';
 import { TreebankWordTokenizer } from 'natural/lib/natural/tokenizers';
 
-import { CACHE_REVALIDATION } from '@/app/lib/defaults';
-import { getFromApi } from '@/app/lib/server/api';
+import { CACHE_REVALIDATION, OLDI_DATASET_URL } from '@/app/lib/defaults';
 
 export const revalidate = CACHE_REVALIDATION;
 export const dynamic = 'force-static';
@@ -19,29 +18,34 @@ type Params = {
 };
 
 export async function GET(request: Request, { params }: Params) {
-  const [sentencesResponse, metadataResponse] = await Promise.all([
-    getFromApi<string[]>(`oldi/${params.language}`),
-    getFromApi<string[]>('oldi/metadata'),
-  ]);
+  const id = parseInt(params.index, 10) - 1;
+  const [code, script] = params.language.split('_');
+  const url = new URL(OLDI_DATASET_URL);
+  url.searchParams.set(
+    'where',
+    `"iso_639_3"='${code}'AND"iso_15924"='${script}'AND"id"=${id}`
+  );
 
-  const [sentences, sources] = await Promise.all([
-    sentencesResponse,
-    metadataResponse,
-  ]);
-
-  if (!sentences?.length || !sources?.length) {
-    return Response.json(null, { status: 404 });
+  const response = await fetch(url.toString(), {
+    headers: process.env.HUGGINGFACE_TOKEN
+      ? new Headers({
+          Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
+        })
+      : undefined,
+  });
+  if (!response.ok) {
+    return Response.error();
   }
 
-  const text = sentences[parseInt(params.index, 10) - 1];
-  const source = sources[parseInt(params.index, 10) - 1];
-
-  if (!text || !source) {
-    return Response.json(null, { status: 404 });
+  const { rows } = await response.json();
+  if (!rows || !rows.length) {
+    return Response.error();
   }
+
+  const sentence = rows[0].row;
 
   const tokenizer = new TreebankWordTokenizer();
-  const words = tokenizer.tokenize(text);
+  const words = tokenizer.tokenize(sentence.text);
 
   let tags: [string, string][] = [];
   if (params.language === 'eng_Latn') {
@@ -51,8 +55,8 @@ export async function GET(request: Request, { params }: Params) {
   }
 
   return Response.json({
-    source,
     tags,
-    text,
+    source: sentence.url,
+    text: sentence.text,
   });
 }

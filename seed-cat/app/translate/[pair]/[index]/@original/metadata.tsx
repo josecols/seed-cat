@@ -14,10 +14,10 @@ type MetadataProps = {
   length: number;
   onOpen?: () => void;
   source: string;
-  wordCount: number;
+  tags?: [string, string][];
 };
 
-export function Metadata({ source, length, wordCount, onOpen }: MetadataProps) {
+export function Metadata({ source, length, tags, onOpen }: MetadataProps) {
   return (
     <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 md:mt-8">
       <Subheading>Metadata</Subheading>
@@ -25,8 +25,14 @@ export function Metadata({ source, length, wordCount, onOpen }: MetadataProps) {
         <DescriptionTerm>Characters</DescriptionTerm>
         <DescriptionDetails>{length}</DescriptionDetails>
 
-        <DescriptionTerm>Words</DescriptionTerm>
-        <DescriptionDetails>{wordCount}</DescriptionDetails>
+        {tags?.length ? (
+          <>
+            <DescriptionTerm>Words</DescriptionTerm>
+            <DescriptionDetails>
+              {tags.filter(([k, v]) => k !== v).length}
+            </DescriptionDetails>
+          </>
+        ) : null}
 
         <DescriptionTerm>Source Document</DescriptionTerm>
         <DescriptionDetails>

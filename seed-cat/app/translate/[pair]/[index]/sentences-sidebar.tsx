@@ -4,41 +4,31 @@ import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList } from 'react-window';
-
-import { SidebarItem } from '@/app/components/sidebar';
-import { useIsReview, useLanguageSentences } from '@/app/lib/client/api';
+import { useIsReview } from '@/app/lib/client/api';
+import { DATASET_SIZE } from '@/app/lib/defaults';
+import { SentencesSidebarItem } from '@/app/translate/[pair]/[index]/sentences-sidebar-item';
 
 export function SentencesSidebar() {
-  const params = useParams<{ pair: string; index: string }>();
-  const [source, _] = params.pair.split('-');
-  const { data: sentences, isLoading } = useLanguageSentences(source);
-
-  if (!sentences || isLoading) {
-    return null;
-  }
-
   return (
     <AutoSizer>
-      {({ height, width }) => (
-        <SentencesWindow sentences={sentences} height={height} width={width} />
-      )}
+      {({ height, width }) => <SentencesWindow height={height} width={width} />}
     </AutoSizer>
   );
 }
 
 type SentencesWindowProps = {
-  sentences: string[];
   width: number;
   height: number;
 };
 
-function SentencesWindow({ width, height, sentences }: SentencesWindowProps) {
+function SentencesWindow({ width, height }: SentencesWindowProps) {
   const isReview = useIsReview();
   const params = useParams<{ pair: string; index: string }>();
   const indexRef = React.useRef<string>(params.index);
   const listRef = React.useRef<FixedSizeList>(null);
-
+  const sentences = new Array(DATASET_SIZE).fill(null);
   const baseHref = `${isReview ? '/review' : '/translate'}/${params.pair}`;
+  const [sourceLanguage, _] = params.pair.split('-');
 
   useEffect(() => {
     if (listRef.current && indexRef.current) {
@@ -56,17 +46,14 @@ function SentencesWindow({ width, height, sentences }: SentencesWindowProps) {
       width={width}
     >
       {({ index, style }) => (
-        <SidebarItem
+        <SentencesSidebarItem
           key={index}
-          aria-label={`Sentence #${index + 1}`}
-          style={style}
-          href={`${baseHref}/${index + 1}`}
-          className="flex w-full"
+          baseHref={baseHref}
           current={params.index === `${index + 1}`}
-        >
-          <span className="font-bold">{index + 1}</span>
-          <span className="truncate font-normal">{sentences[index]}</span>
-        </SidebarItem>
+          index={index}
+          language={sourceLanguage}
+          style={style}
+        />
       )}
     </FixedSizeList>
   );

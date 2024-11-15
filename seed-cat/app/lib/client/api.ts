@@ -61,23 +61,7 @@ async function sentenceFetcherResolver(
 export function useLanguageList() {
   return useSWR(
     '/oldi/languages',
-    apiFetcher<{ name: string }[]>,
-    defaultSwrRevalidateOptions
-  );
-}
-
-export function useLanguageSentences(language: string) {
-  return useSWR(
-    `/oldi/${language}`,
-    apiFetcher<string[]>,
-    defaultSwrRevalidateOptions
-  );
-}
-
-export function useLanguageSentencesCount(language: string) {
-  return useSWR(
-    `/oldi/${language}/count`,
-    apiFetcher<{ count: number }>,
+    apiFetcher<{ name: string, code:string, script: string }[]>,
     defaultSwrRevalidateOptions
   );
 }

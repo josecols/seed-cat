@@ -2,7 +2,7 @@
   <h3 align="center">Seed-CAT</h3>
 
   <p align="center">
-    A computer-aided translation tool designed for expanding the Seed dataset and training machine translation models.
+    A computer-aided translation tool designed for expanding the  <a href="https://huggingface.co/datasets/openlanguagedata/oldi_seed">OLDI Seed dataset</a>.
     <br />
     <br />
     <a href="#getting-started">Getting Started</a>
@@ -64,7 +64,6 @@ python main.py
 The application can be configured with the following environment variables:
 
 * `GCS_BUCKET`: The name of the Google Cloud Storage bucket used for automatic backups.
-* `GITHUB_TOKEN`: A token that increases the rate limits for GitHub API requests. This can be particularly useful during local development or testing.
 * `GOOGLE_APPLICATION_CREDENTIALS`: The Service Account [JSON key file](https://cloud.google.com/iam/docs/keys-create-delete), encoded in `base64` format. This credential allows access to Google Cloud Storage for automatic backups.
 * `HUGGINGFACE_TOKEN`: A user access token for the [Serverless Inference API](https://huggingface.co/docs/api-inference/en/index). If not provided, the application will default to using local inference with [`Transformers.js`](https://github.com/xenova/transformers.js).
 

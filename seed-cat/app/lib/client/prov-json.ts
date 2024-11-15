@@ -8,7 +8,7 @@ import {
   saveObject,
   SeedDB,
 } from '@/app/lib/client/db';
-import { GITHUB_CONTENT_URL, PROV_NAMESPACE } from '@/app/lib/defaults';
+import { OLDI_CONTENT_URL, PROV_NAMESPACE } from '@/app/lib/defaults';
 
 type LiteralArray = (string | number | boolean)[];
 type AttributeValues = string | number | boolean | LiteralArray;
@@ -191,13 +191,13 @@ function initProvJson(sourceLanguage: string) {
   return {
     prefix: {
       prov: 'https://www.w3.org/ns/prov#',
-      oldi: 'https://github.com/openlanguagedata/seed/blob/main/',
+      oldi: 'https://huggingface.co/datasets/openlanguagedata/oldi_seed/',
       wn: 'https://wordnet.princeton.edu/',
       [PROV_NAMESPACE]: 'https://seed-cat.vercel.app/',
     },
     entity: {
       [`oldi:seed/${sourceLanguage}`]: {
-        'prov:location': `${GITHUB_CONTENT_URL}/${sourceLanguage}`,
+        'prov:location': `${OLDI_CONTENT_URL}/${sourceLanguage}`,
         'prov:type': 'oldi:dataset',
       },
     },

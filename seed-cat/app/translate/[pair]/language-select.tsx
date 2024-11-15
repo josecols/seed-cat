@@ -18,14 +18,21 @@ import { getAllKeys } from '@/app/lib/client/db';
 
 type LanguageSelectProps = {
   language?: string;
-  nextIndex: number;
+  defaultIndex: number;
+  source?: boolean;
+  remoteOnly?: boolean;
 };
 
-export function LanguageSelect({ language, nextIndex }: LanguageSelectProps) {
+export function LanguageSelect({
+  language,
+  defaultIndex,
+  source = false,
+  remoteOnly = false,
+}: LanguageSelectProps) {
   const { data } = useLanguageList();
   const params = useParams<{ pair: string; index?: string }>();
   const [localLanguages, setLocalLanguages] = useState<string[]>([]);
-  const sourceLanguage = params.pair.split('-')[0];
+  const [sourceLanguage, targetLanguage] = params.pair.split('-');
 
   useEffect(() => {
     (async () => {
@@ -33,6 +40,17 @@ export function LanguageSelect({ language, nextIndex }: LanguageSelectProps) {
       setLocalLanguages(languages);
     })();
   }, []);
+
+  const getOptionHref = (item: { code: string; script: string }) => {
+    const selectedLanguage = `${item.code}_${item.script}`;
+    const index = params.index ?? defaultIndex;
+
+    if (source) {
+      return `/translate/${selectedLanguage}-${targetLanguage}/${index}`;
+    }
+
+    return `/translate/${sourceLanguage}-${selectedLanguage}/${index}`;
+  };
 
   return (
     <Dropdown>
@@ -44,14 +62,14 @@ export function LanguageSelect({ language, nextIndex }: LanguageSelectProps) {
         <ChevronUpDownIcon />
       </DropdownButton>
       <DropdownMenu>
-        {localLanguages.length > 0 && (
+        {!remoteOnly && localLanguages.length > 0 && (
           <>
             <DropdownSection>
-              <DropdownHeading>Local Files</DropdownHeading>
+              <DropdownHeading>Local Datasets</DropdownHeading>
               {localLanguages.map((target) => (
                 <DropdownItem
                   key={target}
-                  href={`/translate/${sourceLanguage}-${target}/${params.index ?? nextIndex}`}
+                  href={`/translate/${sourceLanguage}-${target}/${params.index ?? defaultIndex}`}
                 >
                   <DropdownLabel>{target}</DropdownLabel>
                 </DropdownItem>
@@ -61,12 +79,9 @@ export function LanguageSelect({ language, nextIndex }: LanguageSelectProps) {
           </>
         )}
         <DropdownSection>
-          <DropdownHeading>Remote Files</DropdownHeading>
+          <DropdownHeading>Remote Datasets</DropdownHeading>
           {data?.map((item) => (
-            <DropdownItem
-              key={item.name}
-              href={`/translate/${sourceLanguage}-${item.name}/${params.index ?? nextIndex}`}
-            >
+            <DropdownItem key={item.name} href={getOptionHref(item)}>
               <DropdownLabel>{item.name}</DropdownLabel>
             </DropdownItem>
           ))}

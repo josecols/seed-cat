@@ -38,12 +38,12 @@ import {
 import {
   getProvDiagram,
   useCompletedTranslationsCount,
-  useLanguageSentencesCount,
 } from '@/app/lib/client/api';
 import { getCompletedTranslations } from '@/app/lib/client/db';
 import { deserialize, serialize } from '@/app/lib/client/prov-json';
 import { LanguageSelect } from '@/app/translate/[pair]/language-select';
 import { MainContext } from '@/app/translate/[pair]/main';
+import { DATASET_SIZE } from '@/app/lib/defaults';
 
 type HeaderProps = {
   sourceLanguage: string;
@@ -59,26 +59,25 @@ export function Header({
   const router = useRouter();
   const params = useParams<{ index?: string }>();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const { data: sentencesCount } = useLanguageSentencesCount(sourceLanguage);
   const { data: completedTranslationsCount } =
     useCompletedTranslationsCount(targetLanguage);
   const { sentenceRange, toggleLanguageCreate, toggleTranslationGuidelines } =
     useContext(MainContext);
 
-  const [lower, _] = sentenceRange.split('-').map(Number);
+  const [lowerRange, _] = sentenceRange.split('-').map(Number);
 
   async function exportTranslations() {
-    if (!sentencesCount || !targetLanguage) {
+    if (!targetLanguage) {
       return;
     }
 
-    const output: string[] = new Array(sentencesCount.count).fill('\n');
+    const output: string[] = new Array(DATASET_SIZE).fill('\n');
     const translations = await getCompletedTranslations(targetLanguage);
 
     translations.forEach((translation) => {
       if (
         translation.attributes.index >= 1 &&
-        translation.attributes.index <= sentencesCount.count
+        translation.attributes.index <= DATASET_SIZE
       ) {
         output[translation.attributes.index - 1] =
           `${translation.attributes.content}\n`;
@@ -181,14 +180,17 @@ export function Header({
       <div className="min-w-0 flex-1">
         <Navbar>
           <NavbarSection className="max-sm:hidden">
-            <NavbarItem
-              href={`/translate/${sourceLanguage}`}
-              current={!targetLanguage}
-            >
-              {sourceLanguage}
-            </NavbarItem>
+            <LanguageSelect
+              source
+              remoteOnly
+              defaultIndex={lowerRange}
+              language={sourceLanguage}
+            />
             <ChevronRightIcon width={20} />
-            <LanguageSelect nextIndex={lower} language={targetLanguage} />
+            <LanguageSelect
+              defaultIndex={lowerRange}
+              language={targetLanguage}
+            />
           </NavbarSection>
           <NavbarSpacer />
           {completedTranslationsCount?.count ? (

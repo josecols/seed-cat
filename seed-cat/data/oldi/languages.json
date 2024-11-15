@@ -1,0 +1,266 @@
+[
+  {
+    "code": "ace",
+    "script": "Arab",
+    "glottocode": "achi1257",
+    "name": "Acehnese (Jawi script)"
+  },
+  {
+    "code": "ace",
+    "script": "Latn",
+    "glottocode": "achi1257",
+    "name": "Acehnese (Latin script)"
+  },
+  {
+    "code": "ary",
+    "script": "Arab",
+    "glottocode": "moro1292",
+    "name": "Moroccan Arabic"
+  },
+  {
+    "code": "arz",
+    "script": "Arab",
+    "glottocode": "egyp1253",
+    "name": "Egyptian Arabic"
+  },
+  {
+    "code": "bam",
+    "script": "Latn",
+    "glottocode": "bamb1269",
+    "name": "Bambara"
+  },
+  {
+    "code": "ban",
+    "script": "Latn",
+    "glottocode": "bali1278",
+    "name": "Balinese"
+  },
+  {
+    "code": "ben",
+    "script": "Beng",
+    "glottocode": "beng1280",
+    "name": "Bengali"
+  },
+  {
+    "code": "bho",
+    "script": "Deva",
+    "glottocode": "bhoj1244",
+    "name": "Bhojpuri"
+  },
+  {
+    "code": "bjn",
+    "script": "Arab",
+    "glottocode": "banj1239",
+    "name": "Banjar (Jawi script)"
+  },
+  {
+    "code": "bjn",
+    "script": "Latn",
+    "glottocode": "banj1239",
+    "name": "Banjar (Latin script)"
+  },
+  {
+    "code": "bug",
+    "script": "Latn",
+    "glottocode": "bugi1244",
+    "name": "Buginese"
+  },
+  {
+    "code": "crh",
+    "script": "Latn",
+    "glottocode": "crim1257",
+    "name": "Crimean Tatar"
+  },
+  {
+    "code": "dik",
+    "script": "Latn",
+    "glottocode": "sout2832",
+    "name": "Southwestern Dinka"
+  },
+  {
+    "code": "dzo",
+    "script": "Tibt",
+    "glottocode": "dzon1239",
+    "name": "Dzongkha"
+  },
+  {
+    "code": "eng",
+    "script": "Latn",
+    "glottocode": "stan1293",
+    "name": "English"
+  },
+  {
+    "code": "fur",
+    "script": "Latn",
+    "glottocode": "east2271",
+    "name": "Friulian"
+  },
+  {
+    "code": "fuv",
+    "script": "Latn",
+    "glottocode": "nige1253",
+    "name": "Nigerian Fulfulde"
+  },
+  {
+    "code": "gug",
+    "script": "Latn",
+    "glottocode": "para1311",
+    "name": "Paraguayan Guaraní"
+  },
+  {
+    "code": "hne",
+    "script": "Deva",
+    "glottocode": "chha1249",
+    "name": "Chhattisgarhi"
+  },
+  {
+    "code": "ita",
+    "script": "Latn",
+    "glottocode": "ital1282",
+    "name": "Italian"
+  },
+  {
+    "code": "kas",
+    "script": "Arab",
+    "glottocode": "kash1277",
+    "name": "Kashmiri (Arabic script)"
+  },
+  {
+    "code": "kas",
+    "script": "Deva",
+    "glottocode": "kash1277",
+    "name": "Kashmiri (Devanagari script)"
+  },
+  {
+    "code": "knc",
+    "script": "Arab",
+    "glottocode": "cent2050",
+    "name": "Central Kanuri (Arabic script)"
+  },
+  {
+    "code": "knc",
+    "script": "Latn",
+    "glottocode": "cent2050",
+    "name": "Central Kanuri (Latin script)"
+  },
+  {
+    "code": "lij",
+    "script": "Latn",
+    "glottocode": "geno1240",
+    "name": "Ligurian (Genoese)"
+  },
+  {
+    "code": "lim",
+    "script": "Latn",
+    "glottocode": "limb1263",
+    "name": "Limburgish"
+  },
+  {
+    "code": "lmo",
+    "script": "Latn",
+    "glottocode": "lomb1257",
+    "name": "Lombard"
+  },
+  {
+    "code": "ltg",
+    "script": "Latn",
+    "glottocode": "east2282",
+    "name": "Latgalian"
+  },
+  {
+    "code": "mag",
+    "script": "Deva",
+    "glottocode": "maga1260",
+    "name": "Magahi"
+  },
+  {
+    "code": "mni",
+    "script": "Beng",
+    "glottocode": "mani1292",
+    "name": "Meitei (Manipuri, Bengali script)"
+  },
+  {
+    "code": "mri",
+    "script": "Latn",
+    "glottocode": "maor1246",
+    "name": "Maori"
+  },
+  {
+    "code": "nqo",
+    "script": "Nkoo",
+    "glottocode": "nkoa1234",
+    "name": "Nko"
+  },
+  {
+    "code": "nus",
+    "script": "Latn",
+    "glottocode": "nuer1246",
+    "name": "Nuer"
+  },
+  {
+    "code": "pbt",
+    "script": "Arab",
+    "glottocode": "sout2649",
+    "name": "Southern Pashto"
+  },
+  {
+    "code": "prs",
+    "script": "Arab",
+    "glottocode": "dari1249",
+    "name": "Dari"
+  },
+  {
+    "code": "scn",
+    "script": "Latn",
+    "glottocode": "sici1248",
+    "name": "Sicilian"
+  },
+  {
+    "code": "shn",
+    "script": "Mymr",
+    "glottocode": "shan1277",
+    "name": "Shan"
+  },
+  {
+    "code": "spa",
+    "script": "Latn",
+    "glottocode": "amer1254",
+    "name": "Spanish (Latin American)"
+  },
+  {
+    "code": "srd",
+    "script": "Latn",
+    "glottocode": "sard1257",
+    "name": "Sardinian"
+  },
+  {
+    "code": "szl",
+    "script": "Latn",
+    "glottocode": "sile1253",
+    "name": "Silesian"
+  },
+  {
+    "code": "taq",
+    "script": "Latn",
+    "glottocode": "tama1365",
+    "name": "Tamasheq (Latin script)"
+  },
+  {
+    "code": "taq",
+    "script": "Tfng",
+    "glottocode": "tama1365",
+    "name": "Tamasheq (Tifinagh script)"
+  },
+  {
+    "code": "vec",
+    "script": "Latn",
+    "glottocode": "vene1259",
+    "name": "Venetian"
+  },
+  {
+    "code": "zgh",
+    "script": "Tfng",
+    "glottocode": "stan1324",
+    "name": "Standard Moroccan Tamazight"
+  }
+]
