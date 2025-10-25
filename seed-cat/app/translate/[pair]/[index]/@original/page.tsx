@@ -4,23 +4,16 @@ import { getLanguageSentence } from '@/app/lib/server/api';
 
 import { Sentence } from './sentence';
 
-export default async function Page({
-  params,
-}: {
-  params: { pair: string; index: string };
+export default async function Page(props: {
+  params: Promise<{ pair: string; index: string }>;
 }) {
+  const params = await props.params;
   const [sourceLanguage, _] = params.pair.split('-');
 
-  const renderTimestamp = Date.now();
   const index = parseInt(params.index, 10);
   const sentence = await getLanguageSentence(sourceLanguage, index);
 
   return sentence ? (
-    <Sentence
-      index={index}
-      language={sourceLanguage}
-      renderTimestamp={renderTimestamp}
-      sentence={sentence}
-    />
+    <Sentence index={index} language={sourceLanguage} sentence={sentence} />
   ) : null;
 }

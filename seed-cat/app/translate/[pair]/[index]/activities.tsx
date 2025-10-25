@@ -1,13 +1,13 @@
-import React, { createContext, useCallback, useMemo, useRef } from 'react';
+import React, { createContext, useCallback, useMemo } from 'react';
 
 import {
   Activity,
   Agent,
-  SeedDB,
   getLatestTranslation,
   getObject,
   getTranslatorAgentId,
   saveObject,
+  SeedDB,
 } from '@/app/lib/client/db';
 
 export type ActivityContextValue = {
@@ -43,7 +43,7 @@ export function ActivityProvider({
   index,
 }: ActivityProviderProps) {
   const [sourceLanguage, targetLanguage] = languagePair.split('-');
-  const activitiesRef = useRef(createActivities());
+  const activities = useMemo(() => createActivities(), []);
 
   const getActivityValues = useCallback(
     async (type: Activity): Promise<Partial<SeedDB['activities']['value']>> => {
@@ -109,12 +109,12 @@ export function ActivityProvider({
           }
 
           const informants = [
-            activitiesRef.current[Activity.CompareMachineTranslation].current,
-            activitiesRef.current[Activity.DisplayPosTags].current,
-            activitiesRef.current[Activity.MachineTranslate].current,
-            activitiesRef.current[Activity.OpenSourceUrl].current,
-            activitiesRef.current[Activity.QueryWordnet].current,
-            activitiesRef.current[Activity.ViewSentence].current,
+            activities[Activity.CompareMachineTranslation].current,
+            activities[Activity.DisplayPosTags].current,
+            activities[Activity.MachineTranslate].current,
+            activities[Activity.OpenSourceUrl].current,
+            activities[Activity.QueryWordnet].current,
+            activities[Activity.ViewSentence].current,
           ].filter((activity) => activity.length > 0);
 
           return {
@@ -126,7 +126,7 @@ export function ActivityProvider({
           return {};
       }
     },
-    [index, sourceLanguage, targetLanguage]
+    [activities, index, sourceLanguage, targetLanguage]
   );
 
   const validateActivityGatekeeper = useCallback(
@@ -180,36 +180,45 @@ export function ActivityProvider({
         ...values,
         type,
       });
-      activitiesRef.current[type].current.push(activity);
+      activities[type].current.push(activity);
 
       return activity;
     },
-    [getActivityValues, index, targetLanguage, validateActivityGatekeeper]
+    [
+      activities,
+      getActivityValues,
+      index,
+      targetLanguage,
+      validateActivityGatekeeper,
+    ]
   );
 
-  async function endActivity(type: Activity) {
-    const activityKey = activitiesRef.current[type].current.at(-1);
-    if (!activityKey) {
-      return;
-    }
+  const endActivity = useCallback(
+    async (type: Activity) => {
+      const activityKey = activities[type].current.at(-1);
+      if (!activityKey) {
+        return;
+      }
 
-    const activity = await getObject('activities', activityKey);
+      const activity = await getObject('activities', activityKey);
 
-    if (activity && !activity.endedAtTime) {
-      return await saveObject('activities', {
-        ...activity,
-        endedAtTime: Date.now(),
-      });
-    }
-  }
+      if (activity && !activity.endedAtTime) {
+        return await saveObject('activities', {
+          ...activity,
+          endedAtTime: Date.now(),
+        });
+      }
+    },
+    [activities]
+  );
 
   const contextValue: ActivityContextValue = useMemo(() => {
     return {
-      activities: activitiesRef.current,
+      activities,
       startActivity,
       endActivity,
     };
-  }, [startActivity]);
+  }, [activities, endActivity, startActivity]);
 
   return (
     <ActivityContext.Provider value={contextValue}>

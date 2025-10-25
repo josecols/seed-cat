@@ -29,10 +29,10 @@ import {
 import {
   Activity,
   Agent,
-  SeedDB,
   getLatestTranslation,
   getObject,
   saveObject,
+  SeedDB,
 } from '@/app/lib/client/db';
 import { deserialize } from '@/app/lib/client/prov-json';
 import { DiffDialog } from '@/app/translate/[pair]/[index]/@translation/diff-dialog';
@@ -43,7 +43,7 @@ import { MainContext } from '@/app/translate/[pair]/main';
 const DynamicMachineTranslateRemote = dynamic(() => import('./mt-local'), {
   loading: () => (
     <div className="animate-pulse">
-      <div className="h-10 w-44 rounded-lg bg-zinc-100" />
+      <div className="h-10 w-44 rounded-lg bg-zinc-100 dark:bg-zinc-800" />
     </div>
   ),
 });
@@ -69,9 +69,13 @@ export function Editor({
   const { enableCloudBackup } = useContext(MainContext);
 
   const emptyTranslationRef = useRef<boolean>(true);
-  const mtActivityRef = useRef<SeedDB['activities']['key']>();
-  const editStartRef = useRef<number>();
-  const diffActivityRef = useRef<SeedDB['activities']['key']>();
+  const mtActivityRef = useRef<SeedDB['activities']['key'] | undefined>(
+    undefined
+  );
+  const editStartRef = useRef<number>(0);
+  const diffActivityRef = useRef<SeedDB['activities']['key'] | undefined>(
+    undefined
+  );
 
   const isReview = useIsReview();
 
@@ -86,6 +90,14 @@ export function Editor({
   const [translation, setTranslation] = useState<string>(
     storedTranslation?.attributes.content ?? ''
   );
+  const [prevStoredTranslation, setPrevStoredTranslation] =
+    useState(storedTranslation);
+
+  if (storedTranslation !== prevStoredTranslation) {
+    setTranslation(storedTranslation?.attributes.content ?? '');
+    setPrevStoredTranslation(storedTranslation);
+  }
+
   const { data: storedMachineTranslation } = useMachineTranslation(
     targetLanguage,
     index
@@ -93,18 +105,13 @@ export function Editor({
   const [machineTranslation, setMachineTranslation] = useState<string>(
     storedMachineTranslation?.attributes.content ?? ''
   );
+  const [prevStoredMachineTranslation, setPrevStoredMachineTranslation] =
+    useState(storedMachineTranslation);
 
-  useEffect(() => {
-    if (storedTranslation?.attributes.content) {
-      setTranslation(storedTranslation.attributes.content);
-    }
-  }, [storedTranslation]);
-
-  useEffect(() => {
-    if (storedMachineTranslation?.attributes.content) {
-      setMachineTranslation(storedMachineTranslation.attributes.content);
-    }
-  }, [storedMachineTranslation]);
+  if (storedMachineTranslation !== prevStoredMachineTranslation) {
+    setMachineTranslation(storedMachineTranslation?.attributes.content ?? '');
+    setPrevStoredMachineTranslation(storedMachineTranslation);
+  }
 
   const reviseTranslation = useCallback(
     async (
@@ -366,7 +373,7 @@ export function Editor({
       <>
         <EditorHeader storedTranslation={storedTranslation} />
         <section className="animate-pulse">
-          <div className="h-32 w-full rounded-lg bg-zinc-100" />
+          <div className="h-32 w-full rounded-lg bg-zinc-100 dark:bg-zinc-800" />
         </section>
       </>
     );
@@ -396,7 +403,9 @@ export function Editor({
         <div className="flex justify-end">
           {loadingMarkAsDone ? (
             <span className="flex items-center gap-2">
-              <span className="text-xs text-zinc-500">Saving</span>
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                Saving
+              </span>
               <Spinner />
             </span>
           ) : (
@@ -463,13 +472,13 @@ type EditorHeaderProps = {
 
 function EditorHeader({ storedTranslation }: EditorHeaderProps) {
   return (
-    <div className="flex items-center gap-2 border-b border-stone-950/10 pb-2">
+    <div className="flex items-center gap-2 border-b border-stone-950/10 pb-2 dark:border-white/10">
       <Heading>Translation</Heading>
       <span className="flex-1" />
       {!storedTranslation?.readonly ? (
         <>
           {storedTranslation?.generatedAtTime ? (
-            <span className="hidden text-xs text-zinc-500 md:block">
+            <span className="hidden text-xs text-zinc-500 md:block dark:text-zinc-400">
               Saved {dayjs(storedTranslation.generatedAtTime).fromNow()}
             </span>
           ) : null}

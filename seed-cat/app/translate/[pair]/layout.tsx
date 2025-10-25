@@ -5,16 +5,20 @@ import { CookieKey } from '@/app/lib/defaults';
 import { cloudStorageSupport } from '@/app/lib/server/config';
 import { Main } from '@/app/translate/[pair]/main';
 
-export default function Layout({
-  children,
-  params,
-}: Readonly<{
-  children: ReactNode;
-  params: {
-    pair: string;
-  };
-}>) {
-  const defaultShowSidebar = cookies().get(CookieKey.Sidebar)?.value === '1';
+export default async function Layout(
+  props: Readonly<{
+    children: ReactNode;
+    params: Promise<{
+      pair: string;
+    }>;
+  }>
+) {
+  const params = await props.params;
+
+  const { children } = props;
+
+  const defaultShowSidebar =
+    (await cookies()).get(CookieKey.Sidebar)?.value === '1';
   const [source, target] = params.pair.split('-');
 
   return (

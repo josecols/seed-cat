@@ -2,10 +2,10 @@
 
 import * as Headless from '@headlessui/react';
 import clsx from 'clsx';
-import Link from 'next/link';
-import React from 'react';
-
-import { TouchTarget } from '@/app/components/button';
+import { LayoutGroup, motion } from 'motion/react';
+import React, { forwardRef, useId } from 'react';
+import { TouchTarget } from './button';
+import { Link } from './link';
 
 export function Navbar({
   className,
@@ -14,10 +14,7 @@ export function Navbar({
   return (
     <nav
       {...props}
-      className={clsx(
-        className,
-        'relative flex flex-1 items-center gap-4 py-2.5'
-      )}
+      className={clsx(className, 'flex flex-1 items-center gap-4 py-2.5')}
     />
   );
 }
@@ -30,7 +27,7 @@ export function NavbarDivider({
     <div
       aria-hidden="true"
       {...props}
-      className={clsx(className, 'h-6 w-px bg-stone-950/10')}
+      className={clsx(className, 'h-6 w-px bg-zinc-950/10 dark:bg-white/10')}
     />
   );
 }
@@ -39,8 +36,12 @@ export function NavbarSection({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
+  let id = useId();
+
   return (
-    <div {...props} className={clsx(className, 'flex items-center gap-2')} />
+    <LayoutGroup id={id}>
+      <div {...props} className={clsx(className, 'flex items-center gap-3')} />
+    </LayoutGroup>
   );
 }
 
@@ -57,41 +58,52 @@ export function NavbarSpacer({
   );
 }
 
-export const NavbarItem = React.forwardRef(function NavbarItem(
+export const NavbarItem = forwardRef(function NavbarItem(
   {
     current,
     className,
     children,
     ...props
   }: { current?: boolean; className?: string; children: React.ReactNode } & (
-    | Omit<Headless.ButtonProps, 'className'>
-    | Omit<React.ComponentPropsWithoutRef<typeof Link>, 'className'>
+    | ({ href?: never } & Omit<Headless.ButtonProps, 'as' | 'className'>)
+    | ({ href: string } & Omit<
+        React.ComponentPropsWithoutRef<typeof Link>,
+        'className'
+      >)
   ),
   ref: React.ForwardedRef<HTMLAnchorElement | HTMLButtonElement>
 ) {
-  const classes = clsx(
+  let classes = clsx(
     // Base
-    'relative flex min-w-0 items-center gap-3 rounded-lg p-2 text-left text-base/6 font-medium text-stone-950 sm:text-sm/5',
+    'relative flex min-w-0 items-center gap-3 rounded-lg p-2 text-left text-base/6 font-medium text-zinc-950 sm:text-sm/5',
     // Leading icon/icon-only
-    'data-[slot=icon]:*:size-6 data-[slot=icon]:*:shrink-0 sm:data-[slot=icon]:*:size-5',
+    '*:data-[slot=icon]:size-6 *:data-[slot=icon]:shrink-0 *:data-[slot=icon]:text-zinc-500 sm:*:data-[slot=icon]:size-5',
     // Trailing icon (down chevron or similar)
-    'data-[slot=icon]:last:[&:not(:nth-child(2))]:*:ml-auto data-[slot=icon]:last:[&:not(:nth-child(2))]:*:size-5 sm:data-[slot=icon]:last:[&:not(:nth-child(2))]:*:size-4',
+    '*:not-nth-2:last:data-[slot=icon]:ml-auto *:not-nth-2:last:data-[slot=icon]:size-5 sm:*:not-nth-2:last:data-[slot=icon]:size-4',
     // Avatar
-    'data-[slot=avatar]:*:-m-0.5 data-[slot=avatar]:*:size-7 data-[slot=avatar]:*:[--avatar-radius:theme(borderRadius.DEFAULT)] data-[slot=avatar]:*:[--ring-opacity:10%] sm:data-[slot=avatar]:*:size-6',
+    '*:data-[slot=avatar]:-m-0.5 *:data-[slot=avatar]:size-7 *:data-[slot=avatar]:[--avatar-radius:var(--radius-md)] sm:*:data-[slot=avatar]:size-6',
     // Hover
-    'hover:bg-stone-950/5',
+    'data-hover:bg-zinc-950/5 data-hover:*:data-[slot=icon]:text-zinc-950',
     // Active
-    'active:bg-stone-950/5'
+    'data-active:bg-zinc-950/5 data-active:*:data-[slot=icon]:text-zinc-950',
+    // Dark mode
+    'dark:text-white dark:*:data-[slot=icon]:text-zinc-400',
+    'dark:data-hover:bg-white/5 dark:data-hover:*:data-[slot=icon]:text-white',
+    'dark:data-active:bg-white/5 dark:data-active:*:data-[slot=icon]:text-white'
   );
 
   return (
     <span className={clsx(className, 'relative')}>
-      {'href' in props ? (
+      {current && (
+        <motion.span
+          layoutId="current-indicator"
+          className="absolute inset-x-2 -bottom-2.5 h-0.5 rounded-full bg-zinc-950 dark:bg-white"
+        />
+      )}
+      {typeof props.href === 'string' ? (
         <Link
           {...props}
-          className={clsx(classes, {
-            'bg-stone-950/5': current,
-          })}
+          className={classes}
           data-current={current ? 'true' : undefined}
           ref={ref as React.ForwardedRef<HTMLAnchorElement>}
         >
@@ -100,7 +112,7 @@ export const NavbarItem = React.forwardRef(function NavbarItem(
       ) : (
         <Headless.Button
           {...props}
-          className={classes}
+          className={clsx('cursor-default', classes)}
           data-current={current ? 'true' : undefined}
           ref={ref}
         >
@@ -110,3 +122,10 @@ export const NavbarItem = React.forwardRef(function NavbarItem(
     </span>
   );
 });
+
+export function NavbarLabel({
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<'span'>) {
+  return <span {...props} className={clsx(className, 'truncate')} />;
+}

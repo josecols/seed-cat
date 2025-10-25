@@ -10,7 +10,7 @@ import {
 } from '@/app/lib/client/db';
 import { ProvJson, serialize } from '@/app/lib/client/prov-json';
 
-const defaultSwrRevalidateOptions = {
+export const defaultSwrRevalidateOptions = {
   revalidateOnFocus: false,
   revalidateOnReconnect: false,
 };
@@ -28,6 +28,8 @@ type Sentence =
       readonly: true;
     }
   | (SeedDB['translations']['value'] & { readonly: false });
+
+export type SentenceSummary = { id: number; text: string };
 
 async function sentenceFetcherResolver(
   resource: string
@@ -61,7 +63,7 @@ async function sentenceFetcherResolver(
 export function useLanguageList() {
   return useSWR(
     '/oldi/languages',
-    apiFetcher<{ name: string, code:string, script: string }[]>,
+    apiFetcher<{ name: string; code: string; script: string }[]>,
     defaultSwrRevalidateOptions
   );
 }
@@ -70,6 +72,29 @@ export function useLanguageSentence(language: string, index: number) {
   return useSWR(
     `/${language}/${index}`,
     sentenceFetcherResolver,
+    defaultSwrRevalidateOptions
+  );
+}
+
+export async function fetchLanguageSentences(
+  language: string,
+  offset: number = 0,
+  limit: number = 50
+): Promise<SentenceSummary[]> {
+  const { sentences } = await apiFetcher<{ sentences: SentenceSummary[] }>(
+    `/oldi/${language}/sentences?offset=${offset}&limit=${limit}`
+  );
+  return sentences;
+}
+
+export function useLanguageSentences(
+  language: string,
+  offset: number = 0,
+  limit: number = 50
+) {
+  return useSWR(
+    `/sentences/${language}?offset=${offset}&limit=${limit}`,
+    () => fetchLanguageSentences(language, offset, limit),
     defaultSwrRevalidateOptions
   );
 }

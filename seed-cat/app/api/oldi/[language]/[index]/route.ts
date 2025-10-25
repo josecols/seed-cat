@@ -11,13 +11,14 @@ export const revalidate = CACHE_REVALIDATION;
 export const dynamic = 'force-static';
 
 type Params = {
-  params: {
+  params: Promise<{
     language: string;
     index: string;
-  };
+  }>;
 };
 
-export async function GET(request: Request, { params }: Params) {
+export async function GET(request: Request, props: Params) {
+  const params = await props.params;
   const id = parseInt(params.index, 10) - 1;
   const [code, script] = params.language.split('_');
   const url = new URL(OLDI_DATASET_URL);

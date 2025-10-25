@@ -32,7 +32,7 @@ export function ModelDialog({
             {Object.entries(progressItems).map(([name, progress]) => (
               <div key={name}>
                 <Text>{name}</Text>
-                <div className="overflow-hidden rounded-full bg-stone-200">
+                <div className="overflow-hidden rounded-full bg-stone-200 dark:bg-white/10">
                   <div
                     className="h-2 rounded-full bg-blue-600"
                     style={{ width: `${progress}%` }}

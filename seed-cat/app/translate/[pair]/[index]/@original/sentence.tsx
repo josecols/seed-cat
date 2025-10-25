@@ -1,7 +1,7 @@
 'use client';
 
 import * as Headless from '@headlessui/react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { BadgeButton } from '@/app/components/badge';
@@ -19,7 +19,6 @@ import { ActivityContext } from '@/app/translate/[pair]/[index]/activities';
 type SentenceProps = {
   index: number;
   language: string;
-  renderTimestamp: number;
   sentence: {
     tags: [string, string][];
     text: string;
@@ -27,17 +26,18 @@ type SentenceProps = {
   };
 };
 
-export function Sentence({
-  index,
-  language,
-  renderTimestamp,
-  sentence,
-}: SentenceProps) {
+export function Sentence({ index, language, sentence }: SentenceProps) {
   const [wordNetTerm, setWordNetTerm] = useState('');
   const [showTags, setShowTags] = useState(false);
   const [showWordNet, setShowWordNet] = useState(false);
   const { startActivity, endActivity } = useContext(ActivityContext);
   const isReview = useIsReview();
+
+  const renderTimestampRef = useRef(0);
+
+  useEffect(() => {
+    renderTimestampRef.current = Date.now();
+  }, []);
 
   const quoteSentenceActivity = useDebouncedCallback(async () => {
     if (isReview || !sentence.text || !sentence.tags.length) {
@@ -45,7 +45,7 @@ export function Sentence({
     }
 
     const activity = await startActivity(Activity.ViewSentence, {
-      startedAtTime: renderTimestamp,
+      startedAtTime: renderTimestampRef.current,
     });
 
     if (!activity) {
@@ -61,7 +61,7 @@ export function Sentence({
           sourceLanguage: language,
           source: sentence.source,
         },
-        generatedAtTime: renderTimestamp,
+        generatedAtTime: renderTimestampRef.current,
         wasGeneratedBy: activity,
         wasQuotedFrom: `oldi:seed/${language}`,
       });
@@ -75,7 +75,7 @@ export function Sentence({
     }
 
     const tokenizeActivity = await startActivity(Activity.TokenizeSentence, {
-      startedAtTime: renderTimestamp,
+      startedAtTime: renderTimestampRef.current,
       endedAtTime: Date.now(),
     });
     if (tokenizeActivity) {
@@ -85,14 +85,14 @@ export function Sentence({
           index,
           language: language,
         },
-        generatedAtTime: renderTimestamp,
+        generatedAtTime: renderTimestampRef.current,
         wasGeneratedBy: tokenizeActivity!,
       });
       await endActivity(Activity.TokenizeSentence);
     }
 
     const posActivity = await startActivity(Activity.GeneratePosTags, {
-      startedAtTime: renderTimestamp,
+      startedAtTime: renderTimestampRef.current,
       endedAtTime: Date.now(),
     });
     if (posActivity) {
@@ -102,7 +102,7 @@ export function Sentence({
           index,
           language: language,
         },
-        generatedAtTime: renderTimestamp,
+        generatedAtTime: renderTimestampRef.current,
         wasGeneratedBy: posActivity,
       });
       await endActivity(Activity.GeneratePosTags);
@@ -170,7 +170,7 @@ export function Sentence({
               <Label className="cursor-pointer font-medium">Show tags</Label>
             </Headless.Field>
             {showTags ? (
-              <span className="text-xs/6 text-zinc-600">
+              <span className="text-xs/6 text-zinc-600 dark:text-zinc-400">
                 You can click on each word to see more information.
               </span>
             ) : null}

@@ -1,19 +1,13 @@
 'use client';
 
-import tailwindConfig from '@/tailwind.config';
 import Cookies from 'js-cookie';
-import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import resolveConfig from 'tailwindcss/resolveConfig';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { CookieKey } from '@/app/lib/defaults';
 import { ActivityProvider } from '@/app/translate/[pair]/[index]/activities';
 import { MainContext } from '@/app/translate/[pair]/main';
-
-const { theme } = resolveConfig(tailwindConfig);
-
-type Breakpoint = keyof typeof theme.screens;
 
 type PanelsProps = {
   children: ReactNode;
@@ -43,7 +37,7 @@ export function Panels({
 
   return (
     <ActivityProvider languagePair={languagePair} index={parseInt(index, 10)}>
-      <div className="flex grow flex-col gap-6 rounded-lg bg-white p-4 pb-2 ring-1 ring-stone-950/5 lg:p-6 lg:pb-2 lg:shadow-sm">
+      <div className="flex grow flex-col gap-6 rounded-lg bg-white p-4 pb-2 ring-1 ring-stone-950/5 lg:p-6 lg:pb-2 lg:shadow-sm dark:bg-zinc-900 dark:ring-white/10">
         <PanelLayout
           primary={primary}
           secondary={secondary}
@@ -62,7 +56,7 @@ function PanelLayout({
   defaultLayout,
   children,
 }: Pick<PanelsProps, 'primary' | 'secondary' | 'defaultLayout' | 'children'>) {
-  const isMd = useBreakpoint('md');
+  const isMd = true;
 
   return (
     <>
@@ -105,7 +99,7 @@ function HorizontalLayout({
           {primary}
         </Panel>
         <PanelResizeHandle className="group flex flex-col justify-center rounded px-4 py-4 transition-colors duration-200 ease-linear">
-          <span className="hidden h-20 w-1 rounded bg-stone-200 transition-colors hover:bg-stone-300 group-hover:bg-stone-300 group-[[data-resize-handle-active]]:bg-blue-500 md:block" />
+          <span className="hidden h-20 w-1 rounded bg-stone-200 transition-colors group-hover:bg-stone-300 group-[[data-resize-handle-active]]:bg-blue-500 hover:bg-stone-300 md:block dark:bg-white/10 dark:group-hover:bg-white/20 dark:group-[[data-resize-handle-active]]:bg-blue-400 dark:hover:bg-white/20" />
         </PanelResizeHandle>
         <Panel
           collapsible
@@ -131,25 +125,4 @@ function VerticalLayout({
       <div className="flex-grow" />
     </>
   );
-}
-
-function useBreakpoint(targetBreakpoint: Breakpoint): boolean {
-  const [isBreakpoint, setIsBreakpoint] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(
-      `(min-width: ${theme.screens[targetBreakpoint]})`
-    );
-    const handleChange = (e: MediaQueryListEvent) => {
-      setIsBreakpoint(e.matches);
-    };
-
-    setIsBreakpoint(mediaQuery.matches);
-
-    mediaQuery.addEventListener('change', handleChange);
-
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [targetBreakpoint]);
-
-  return isBreakpoint;
 }

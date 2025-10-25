@@ -49,7 +49,7 @@ export function TranslationGuidelines({
         <Divider className="my-4" />
         <div className="my-4">
           <Subheading>Important note</Subheading>
-          <ul className="list-inside list-disc text-sm/6 text-zinc-600">
+          <ul className="list-inside list-disc text-sm/6 text-zinc-600 dark:text-zinc-400">
             <li>
               The use of post-edited machine translated content is allowed,
               provided all data is manually verified and edited where necessary.
@@ -66,7 +66,7 @@ export function TranslationGuidelines({
         </div>
         <div className="my-4">
           <Subheading>General guidelines</Subheading>
-          <ol className="list-inside list-decimal text-sm/6 text-zinc-600">
+          <ol className="list-inside list-decimal text-sm/6 text-zinc-600 dark:text-zinc-400">
             <li>
               You will be translating sentences coming from different sources.
               Please refer to the source document if available.
@@ -138,13 +138,13 @@ export function TranslationGuidelines({
         </div>
         <div id="named-entities" className="my-4">
           <Subheading>Named Entities</Subheading>
-          <Text className="mb-4 text-sm/6 text-zinc-600">
+          <Text className="mb-4 text-sm/6 text-zinc-600 dark:text-zinc-400">
             Named entities are people, places, organisations, etc., that are
             commonly referred to using a proper noun. This section provides
             guidance on how to handle named entities. Please review the
             following guidelines carefully:
           </Text>
-          <ol className="list-inside list-decimal text-sm/6 text-zinc-600">
+          <ol className="list-inside list-decimal text-sm/6 text-zinc-600 dark:text-zinc-400">
             <li>
               If there is a commonly used term in the target language for the
               Named Entity:

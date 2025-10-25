@@ -3,13 +3,13 @@
 import React from 'react';
 
 import { SidebarItem } from '@/app/components/sidebar';
-import { useLanguageSentence } from '@/app/lib/client/api';
 
 type SentencesSidebarItemProps = {
   baseHref: string;
   current?: boolean;
   index: number;
-  language: string;
+  sentence?: { text: string };
+  isLoading?: boolean;
   style?: React.CSSProperties;
 };
 
@@ -17,12 +17,10 @@ export function SentencesSidebarItem({
   baseHref,
   current = false,
   index,
-  language,
+  sentence,
+  isLoading = false,
   style,
 }: SentencesSidebarItemProps) {
-  let { data: translation, isLoading: loadingTranslation } =
-    useLanguageSentence(language, index + 1);
-
   return (
     <SidebarItem
       key={index}
@@ -33,14 +31,12 @@ export function SentencesSidebarItem({
       current={current}
     >
       <span className="font-bold">{index + 1}</span>
-      {loadingTranslation || !translation?.attributes?.content ? (
+      {isLoading || !sentence?.text ? (
         <span className="ml-4 flex w-full animate-pulse gap-x-2">
-          <span className="block h-2 w-60 rounded-lg bg-zinc-300" />
+          <span className="block h-2 w-60 rounded-lg bg-zinc-300 dark:bg-zinc-700" />
         </span>
       ) : (
-        <span className="truncate font-normal">
-          {translation?.attributes?.content}
-        </span>
+        <span className="truncate font-normal">{sentence.text}</span>
       )}
     </SidebarItem>
   );
