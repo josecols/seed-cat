@@ -87,18 +87,6 @@ export async function fetchLanguageSentences(
   return sentences;
 }
 
-export function useLanguageSentences(
-  language: string,
-  offset: number = 0,
-  limit: number = 50
-) {
-  return useSWR(
-    `/sentences/${language}?offset=${offset}&limit=${limit}`,
-    () => fetchLanguageSentences(language, offset, limit),
-    defaultSwrRevalidateOptions
-  );
-}
-
 export function useMachineTranslation(targetLanguage: string, index: number) {
   return useSWR(
     `/machine-translations/${targetLanguage}/${index}`,

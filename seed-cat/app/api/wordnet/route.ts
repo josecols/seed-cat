@@ -1,9 +1,7 @@
 import { type DataRecord, WordNet } from 'natural/lib/natural/wordnet';
 import path from 'path';
 
-import { CACHE_REVALIDATION } from '@/app/lib/defaults';
-
-export const revalidate = CACHE_REVALIDATION;
+export const revalidate = 43200;
 
 const wordnet = new WordNet(path.join(process.cwd(), 'data/wordnet'));
 

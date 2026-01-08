@@ -10,13 +10,24 @@ const credentials = JSON.parse(
     'base64'
   ).toString()
 );
-const storage = new Storage({ credentials });
+let storage: Storage | null = null;
+try {
+  storage = new Storage({ credentials });
+} catch (error) {
+  storage = null;
+}
 
 async function uploadFile(bucket: string, filename: string, content: string) {
+  if (!storage) {
+    throw new Error('Invalid GOOGLE_APPLICATION_CREDENTIALS');
+  }
   await storage.bucket(bucket).file(filename).save(content);
 }
 
 async function downloadFile(bucket: string, filename: string) {
+  if (!storage) {
+    throw new Error('Invalid GOOGLE_APPLICATION_CREDENTIALS');
+  }
   const file = storage.bucket(bucket).file(filename);
   const [content] = await file.download();
   return content.toString('utf-8');

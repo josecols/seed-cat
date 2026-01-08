@@ -5,9 +5,9 @@ import {
 } from 'natural/lib/natural/brill_pos_tagger';
 import { TreebankWordTokenizer } from 'natural/lib/natural/tokenizers';
 
-import { CACHE_REVALIDATION, OLDI_DATASET_URL } from '@/app/lib/defaults';
+import { OLDI_DATASET_URL } from '@/app/lib/defaults';
 
-export const revalidate = CACHE_REVALIDATION;
+export const revalidate = 43200;
 export const dynamic = 'force-static';
 
 type Params = {
