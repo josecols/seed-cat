@@ -6,9 +6,13 @@ import { EmptyTarget } from '@/app/translate/[pair]/empty-target';
 
 export const runtime = 'edge';
 
-export default function Page({ params }: { params: { pair: string } }) {
+export default async function Page(props: {
+  params: Promise<{ pair: string }>;
+}) {
+  const params = await props.params;
   const [source, target] = params.pair.split('-');
-  const range = cookies().get(CookieKey.SentenceRange)?.value ?? SENTENCE_RANGE;
+  const range =
+    (await cookies()).get(CookieKey.SentenceRange)?.value ?? SENTENCE_RANGE;
   const [lower, _] = range.split('-').map(Number);
 
   if (source && target) {

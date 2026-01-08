@@ -9,7 +9,7 @@ export function WordNetSkeleton({ count }: WordNetSkeletonProps) {
 
   return items.map((_, index) => (
     <section key={index} className="animate-pulse">
-      <div className="h-32 rounded-lg bg-zinc-100" />
+      <div className="h-32 rounded-lg bg-zinc-100 dark:bg-zinc-800" />
     </section>
   ));
 }

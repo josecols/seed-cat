@@ -15,7 +15,7 @@ import {
   DialogTitle,
 } from '@/app/components/dialog';
 import { Subheading } from '@/app/components/heading';
-import { Code, Text, TextLink } from '@/app/components/text';
+import { TextLink } from '@/app/components/text';
 import { useWordNet } from '@/app/lib/client/api';
 import { Activity, saveObject } from '@/app/lib/client/db';
 import { getWordNetPOSColor, getWordNetPOSLabel } from '@/app/lib/utils';
@@ -110,7 +110,7 @@ export function WordNetDialog({ term, onClose, open }: WordNetDialogProps) {
           records?.map((result) => (
             <section
               key={result.synsetOffset}
-              className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3"
+              className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-white/10 dark:bg-zinc-900"
             >
               <Subheading>{result.lemma}</Subheading>
 

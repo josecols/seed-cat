@@ -5,7 +5,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/app/components/button';
 import {
@@ -41,9 +41,15 @@ export function LanguageCreate({
   sourceLanguage,
 }: LanguageCreateDialog) {
   const router = useRouter();
-  const startedAtTimeRef = useRef(Date.now());
+  const startedAtTimeRef = useRef(0);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(defaultName ?? '');
+
+  useEffect(() => {
+    if (open) {
+      startedAtTimeRef.current = Date.now();
+    }
+  }, [open]);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setName(event.target.value);
@@ -97,7 +103,7 @@ export function LanguageCreate({
             <Link
               href="https://oldi.org/guidelines#language-codes"
               target="_blank"
-              className="cursor-pointer transition-colors hover:text-blue-500"
+              className="cursor-pointer text-zinc-500 transition-colors hover:text-blue-500 dark:text-zinc-400 dark:hover:text-blue-400"
             >
               <InformationCircleIcon width={18} />
             </Link>

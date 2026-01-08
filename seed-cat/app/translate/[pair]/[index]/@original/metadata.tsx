@@ -19,7 +19,7 @@ type MetadataProps = {
 
 export function Metadata({ source, length, tags, onOpen }: MetadataProps) {
   return (
-    <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 md:mt-8">
+    <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 md:mt-8 dark:border-white/10 dark:bg-zinc-900">
       <Subheading>Metadata</Subheading>
       <DescriptionList className="mt-2">
         <DescriptionTerm>Characters</DescriptionTerm>

@@ -1,18 +1,14 @@
-import { NextRequest, NextResponse, URLPattern } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { COOKIE_MAX_AGE, CookieKey, SENTENCE_RANGE } from '@/app/lib/defaults';
 import { v4 as uuid4 } from 'uuid';
 
 const COOKIE_OPTIONS = { maxAge: COOKIE_MAX_AGE };
-const PATTERNS: [URLPattern, typeof patternHandler][] = [
-  [new URLPattern({ pathname: '/translate/:pair/:index' }), patternHandler],
-  [new URLPattern({ pathname: '/review/:pair/:index' }), patternHandler],
-];
 
 export const config = {
   matcher: ['/translate/:path*', '/review/:path*'],
 };
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   let response = NextResponse.next();
 
   response = setUserId(request, response);
@@ -21,25 +17,18 @@ export function middleware(request: NextRequest) {
   return response;
 }
 
-function getParams(url: string) {
-  const input = url.split('?')[0];
-
-  for (const [pattern, handler] of PATTERNS) {
-    if (!pattern) {
-      continue;
-    }
-
-    const patternResult = pattern.exec(input);
-    if (patternResult !== null && 'pathname' in patternResult) {
-      return handler(patternResult);
-    }
+function getParams(pathname: string) {
+  const match = pathname.match(/^\/(translate|review)\/([^\/]+)\/([^\/]+)/);
+  
+  if (match) {
+    return {
+      type: match[1],
+      pair: match[2],
+      index: match[3]
+    };
   }
-}
-
-function patternHandler(result: ReturnType<URLPattern['exec']>) {
-  if (result) {
-    return result.pathname.groups;
-  }
+  
+  return null;
 }
 
 function setUserId(request: NextRequest, response: NextResponse) {
@@ -72,7 +61,7 @@ function validateRange(request: NextRequest, response: NextResponse) {
     }
   }
 
-  const params = getParams(request.nextUrl.href);
+  const params = getParams(request.nextUrl.pathname);
   if (params?.pair && params?.index) {
     const index = Number(params.index);
     if (index < lower || index > upper) {

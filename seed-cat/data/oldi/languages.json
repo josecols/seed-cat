@@ -90,6 +90,12 @@
     "name": "English"
   },
   {
+    "code": "fra",
+    "script": "Latn",
+    "glottocode": "stan1290",
+    "name": "French"
+  },
+  {
     "code": "fur",
     "script": "Latn",
     "glottocode": "east2271",
@@ -130,6 +136,12 @@
     "script": "Deva",
     "glottocode": "kash1277",
     "name": "Kashmiri (Devanagari script)"
+  },
+  {
+    "code": "kir",
+    "script": "Cyrl",
+    "glottocode": "kirg1245",
+    "name": "Kyrgyz"
   },
   {
     "code": "knc",

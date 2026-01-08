@@ -24,7 +24,7 @@ export default function MachineTranslateLocal({
   text,
   translation,
 }: MachineTranslateLocalProps) {
-  const worker = useRef<Worker>();
+  const worker = useRef<Worker>(undefined);
   const [modelAlert, setModelAlert] = useState(false);
   const [progressItems, setProgressItems] = useState<Record<string, number>>(
     {}

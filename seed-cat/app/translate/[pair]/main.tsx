@@ -3,13 +3,7 @@
 import { clsx } from 'clsx';
 import Cookies from 'js-cookie';
 import { useSearchParams } from 'next/navigation';
-import React, {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { createContext, useCallback, useMemo, useState } from 'react';
 
 import {
   Sidebar,
@@ -53,29 +47,35 @@ export function Main({
   ...props
 }: MainProps) {
   const searchParams = useSearchParams();
-  const [sentenceRange, setSentenceRange] = useState<string>(SENTENCE_RANGE);
+  const [sentenceRange, setSentenceRange] = useState<string>(() => {
+    if (typeof window === 'undefined') {
+      return SENTENCE_RANGE;
+    }
+    return Cookies.get(CookieKey.SentenceRange) ?? SENTENCE_RANGE;
+  });
   const [showSidebar, setShowSidebar] = useState(defaultShowSidebar);
-  const [showLanguageCreate, setShowLanguageCreate] = useState(false);
+  const [showLanguageCreate, setShowLanguageCreate] = useState(
+    searchParams.has('target')
+  );
+  const [prevHasTarget, setPrevHasTarget] = useState(
+    searchParams.has('target')
+  );
   const [showTranslationGuidelines, setShowTranslationGuidelines] =
     useState(false);
-  const [acknowledgedGuidelines, setAcknowledgedGuidelines] = useState(true);
+  const [acknowledgedGuidelines, setAcknowledgedGuidelines] = useState(() => {
+    if (typeof window === 'undefined') {
+      return true;
+    }
+    return Cookies.get(CookieKey.AcknowledgedGuidelines) === '1';
+  });
 
-  useEffect(() => {
-    setAcknowledgedGuidelines(
-      Cookies.get(CookieKey.AcknowledgedGuidelines) === '1'
-    );
-  }, []);
-
-  useEffect(() => {
-    if (searchParams.has('target')) {
+  const hasTarget = searchParams.has('target');
+  if (hasTarget !== prevHasTarget) {
+    setPrevHasTarget(hasTarget);
+    if (hasTarget) {
       setShowLanguageCreate(true);
     }
-  }, [searchParams]);
-
-  useEffect(() => {
-    const value = Cookies.get(CookieKey.SentenceRange);
-    setSentenceRange(value ?? SENTENCE_RANGE);
-  }, []);
+  }
 
   function toggleSidebar() {
     setShowSidebar((prev) => {
@@ -120,12 +120,12 @@ export function Main({
 
   return (
     <MainContext.Provider value={contextValue}>
-      <div className="relative isolate flex min-h-svh w-full flex-col overflow-y-auto overflow-x-clip bg-stone-100 md:overflow-clip">
+      <div className="relative isolate flex min-h-svh w-full flex-col overflow-x-clip overflow-y-auto bg-stone-100 md:overflow-clip dark:bg-zinc-950">
         <Header
           toggleSidebar={props.targetLanguage ? toggleSidebar : undefined}
           {...props}
         />
-        <div className="absolute bottom-0 top-14 flex w-full px-2">
+        <div className="absolute top-14 bottom-0 flex w-full px-2">
           {props.targetLanguage && (
             <Sidebar
               className={clsx('flex-shrink-0 transition-all', {
@@ -133,10 +133,10 @@ export function Main({
                 'invisible w-0 opacity-0': !showSidebar,
               })}
             >
-              <SidebarHeader>
+              <SidebarHeader className="px-0 py-2">
                 <SidebarHeading>Source Sentences</SidebarHeading>
               </SidebarHeader>
-              <SidebarBody className="flex-grow">
+              <SidebarBody className="flex-grow p-0">
                 <SentencesSidebar />
               </SidebarBody>
             </Sidebar>

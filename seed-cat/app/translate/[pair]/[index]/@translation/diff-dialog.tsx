@@ -1,5 +1,5 @@
-import { type Change, diffChars, diffWords } from 'diff';
-import React, { useEffect, useState } from 'react';
+import { diffChars, diffWords } from 'diff';
+import React, { useMemo } from 'react';
 
 import { Badge } from '@/app/components/badge';
 import { Button } from '@/app/components/button';
@@ -39,12 +39,11 @@ export function DiffDialog({
   open,
   original,
 }: DiffDialogProps) {
-  const [diff, setDiff] = useState<Change[]>([]);
-
-  useEffect(() => {
+  const diff = useMemo(() => {
     if (open) {
-      setDiff(diffFunctions[diffType](manualTranslation, modelTranslation));
+      return diffFunctions[diffType](manualTranslation, modelTranslation);
     }
+    return [];
   }, [diffType, manualTranslation, modelTranslation, open]);
 
   return (

@@ -5,5 +5,5 @@ export function cloudStorageSupport() {
 }
 
 export function localMTInference() {
-  return !process.env.HUGGINGFACE_TOKEN
+  return !process.env.HUGGINGFACE_TOKEN;
 }

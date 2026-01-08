@@ -1,15 +1,14 @@
 import React from 'react';
 
 import { getLanguageSentence } from '@/app/lib/server/api';
-import {localMTInference} from "@/app/lib/server/config";
+import { localMTInference } from '@/app/lib/server/config';
 
 import { Editor } from './editor';
 
-export default async function Page({
-  params,
-}: {
-  params: { pair: string; index: string };
+export default async function Page(props: {
+  params: Promise<{ pair: string; index: string }>;
 }) {
+  const params = await props.params;
   const [source, target] = params.pair.split('-');
   const original = await getLanguageSentence(source, params.index);
 

@@ -20,7 +20,13 @@ export function DescriptionTerm({
   ...props
 }: React.ComponentPropsWithoutRef<'dt'>) {
   return (
-    <dt {...props} className={clsx(className, 'col-start-1 text-zinc-500')} />
+    <dt
+      {...props}
+      className={clsx(
+        className,
+        'col-start-1 text-zinc-500 dark:text-zinc-400'
+      )}
+    />
   );
 }
 
@@ -28,5 +34,10 @@ export function DescriptionDetails({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'dd'>) {
-  return <dd {...props} className={clsx(className, 'text-zinc-950')} />;
+  return (
+    <dd
+      {...props}
+      className={clsx(className, 'text-zinc-950 dark:text-white')}
+    />
+  );
 }
